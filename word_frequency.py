@@ -10,20 +10,22 @@
 import re
 
 #This is a function that checks if a text qualifies as a sentence. You do not need to modify this!
+import re
+
 def is_sentence(text):
-    # Check if the text is not empty and is a string
+    # Make sure input is actually text and not empty
     if not isinstance(text, str) or not text.strip():
         return False
 
-    # Check for starting with a capital letter
+    # First character should be a capital letter
     if not text[0].isupper():
         return False
 
-    # Check for ending punctuation
+    # Must finish with punctuation like . ? or !
     if not re.search(r'[.!?]$', text):
         return False
 
-    # Check if it contains at least one word (non-whitespace characters)
+    # Needs to have at least one word (not just spaces)
     if not re.search(r'\w+', text):
         return False
 
@@ -31,7 +33,28 @@ def is_sentence(text):
 
 user_sentence = input("Enter a sentence: ")
 
+# Keep asking until the input fits the rules above
 while (is_sentence(user_sentence) == False):
-    print("This does not meet the criteria for a sentence.")
-    user_input = input("Enter a sentence: ")
-    
+    print("That doesn’t count as a proper sentence.")
+    user_sentence = input("Enter a sentence: ")
+
+# Break the sentence into words and clean punctuation
+words = user_sentence.split()
+clean_words = [re.sub(r'[^\w]', '', word).lower() for word in words]
+
+word_list = []
+freq_list = []
+
+# Go through each word and count how many times it shows up
+for word in words:
+    if word in word_list:
+        index = word_list.index(word)
+        freq_list[index] += 1
+    else:
+        word_list.append(word)
+        freq_list.append(1)
+
+# Print the word frequency results
+for i in range(len(word_list)):
+    print(f"{word_list[i]}: {freq_list[i]}")
+print()
